@@ -54,12 +54,6 @@ static int is_empty(sll_node* head) {
 
 static void link_nodes(sll_node* n1, sll_node* n2) { n1->next = n2; }
 
-static void insert_after_node(sll_node* current, int key) {
-    sll_node* new_node = sll_create_node(key);
-    link_nodes(new_node, current->next);
-    link_nodes(current, new_node);
-}
-
 static sll_node* find_previous_node(int key, sll_node* head) {
     if (is_empty(head))
         return NULL;
@@ -73,32 +67,51 @@ static sll_node* find_previous_node(int key, sll_node* head) {
         // a node with the given key was not found
         if (current->next == NULL)
             return NULL;
+
         prev    = current;
         current = current->next;
     }
     return prev;
 }
 
+static void insert_after_node(sll_node* current, int key) {
+    sll_node* new_node = sll_create_node(key);
+    link_nodes(new_node, current->next);
+    link_nodes(current, new_node);
+}
+
 sll_node* sll_create_node(int key) {
     sll_node* node = (sll_node*)malloc(sizeof(sll_node));
+
     // failed to allocate memory
     if (node == NULL)
         return NULL;
-    else {
-        node->key  = key;
-        node->next = NULL;
-        return node;
-    }
+
+    node->key  = key;
+    node->next = NULL;
+    return node;
 }
 
-// append node to the end of the list
 void sll_append(int key, sll_node* head) {
     sll_node* newsll_node = sll_create_node(key);
     sll_node* current     = head;
+
     while (current->next != NULL) {
         current = current->next;
     }
+
     link_nodes(current, newsll_node);
+}
+
+void sll_insert_first(int key, sll_node* head) { insert_after_node(head, key); }
+
+void sll_insert_after(int k, int key, sll_node* head) {
+    sll_node* prev = find_previous_node(k, head);
+    // list empty or node not found
+    if (prev == NULL)
+        return;
+    sll_node* current = prev->next;
+    insert_after_node(current, key);
 }
 
 void sll_delete_node(int key, sll_node* head) {
@@ -113,24 +126,14 @@ void sll_delete_node(int key, sll_node* head) {
     free(tmp);
 }
 
-void sll_insert_first(int key, sll_node* head) { insert_after_node(head, key); }
-
 void sll_delete_first(sll_node* head) {
     // check if list is empty
     if (is_empty(head))
         return;
+
     sll_node* first = head->next;
     link_nodes(head, first->next);
     free(first);
-}
-
-void sll_insert_after(int k, int key, sll_node* head) {
-    sll_node* prev = find_previous_node(k, head);
-    // list empty or node not found
-    if (prev == NULL)
-        return;
-    sll_node* current = prev->next;
-    insert_after_node(current, key);
 }
 
 sll_node* sll_find(int key, sll_node* head) {

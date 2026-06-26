@@ -30,19 +30,6 @@ sll_node* sll_create_node(int key);
 void sll_append(int key, sll_node* head);
 
 /**
- * @brief Deletes a node with a specific key from the list.
- *
- * Searches for the first occurrence of the given key and removes that node
- * from the linked list.
- *
- * @param key Key of the node to delete.
- * @param head Pointer to the head node of the list.
- *
- * @note Does nothing if the list is empty or the key is not found.
- */
-void sll_delete_node(int key, sll_node* head);
-
-/**
  * @brief Inserts a new node at the beginning of the list.
  *
  * Inserts a node immediately after the head node.
@@ -51,17 +38,6 @@ void sll_delete_node(int key, sll_node* head);
  * @param head Pointer to the head node of the list.
  */
 void sll_insert_first(int key, sll_node* head);
-
-/**
- * @brief Deletes the first node in the list.
- *
- * Removes the first element after the head node.
- *
- * @param head Pointer to the head node of the list.
- *
- * @note Does nothing if the list is empty.
- */
-void sll_delete_first(sll_node* head);
 
 /**
  * @brief Inserts a new node after a node with a specific key.
@@ -76,6 +52,30 @@ void sll_delete_first(sll_node* head);
  * @note Does nothing if the target node is not found.
  */
 void sll_insert_after(int k, int key, sll_node* head);
+
+/**
+ * @brief Deletes a node with a specific key from the list.
+ *
+ * Searches for the first occurrence of the given key and removes that node
+ * from the linked list.
+ *
+ * @param key Key of the node to delete.
+ * @param head Pointer to the head node of the list.
+ *
+ * @note Does nothing if the list is empty or the key is not found.
+ */
+void sll_delete_node(int key, sll_node* head);
+
+/**
+ * @brief Deletes the first node in the list.
+ *
+ * Removes the first element after the head node.
+ *
+ * @param head Pointer to the head node of the list.
+ *
+ * @note Does nothing if the list is empty.
+ */
+void sll_delete_first(sll_node* head);
 
 /**
  * @brief Finds a node with a given key.

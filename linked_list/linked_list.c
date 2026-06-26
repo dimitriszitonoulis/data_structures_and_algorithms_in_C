@@ -3,10 +3,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// helper functions
+/**
+ * @brief Checks whether a singly linked list is empty.
+ *
+ * Determines if the list contains any nodes after the head node.
+ *
+ * @param head Pointer to the head node of the list.
+ * @return true if the list is empty, false otherwise.
+ */
 static int is_empty(sll_node* head);
+
+/**
+ * @brief Links two nodes together.
+ *
+ * Sets the next pointer of the first node to point to the second node.
+ *
+ * @param n1 Pointer to the first node.
+ * @param n2 Pointer to the node that should follow n1.
+ */
 static void link_nodes(sll_node* n1, sll_node* n2);
+
+/**
+ * @brief Finds the node preceding a node with a given key.
+ *
+ * Searches the linked list for a node containing the specified key
+ * and returns the node immediately before it.
+ *
+ * @param key The key value to search for.
+ * @param head Pointer to the head node of the list.
+ *
+ * @return Pointer to the previous node if found.
+ * @return NULL if the list is empty or no node contains the key.
+ */
 static sll_node* find_previous_node(int key, sll_node* head);
+
+/**
+ * @brief Inserts a new node after a specified node.
+ *
+ * Creates a new node containing the given key and inserts it directly
+ * after the provided node.
+ *
+ * @param current Node after which the new node will be inserted.
+ * @param key Value to store in the new node.
+ */
 static void insert_after_node(sll_node* current, int key);
 
 static int is_empty(sll_node* head) {
@@ -15,16 +54,12 @@ static int is_empty(sll_node* head) {
 
 static void link_nodes(sll_node* n1, sll_node* n2) { n1->next = n2; }
 
-// insert after current
 static void insert_after_node(sll_node* current, int key) {
     sll_node* new_node = sll_create_node(key);
     link_nodes(new_node, current->next);
     link_nodes(current, new_node);
 }
 
-// find previous node of the node with the given key
-// return NULL if:	list is empty
-//					if node with given key not found
 static sll_node* find_previous_node(int key, sll_node* head) {
     if (is_empty(head))
         return NULL;
@@ -44,11 +79,11 @@ static sll_node* find_previous_node(int key, sll_node* head) {
     return prev;
 }
 
-// function implementations
 sll_node* sll_create_node(int key) {
     sll_node* node = (sll_node*)malloc(sizeof(sll_node));
+    // failed to allocate memory
     if (node == NULL)
-        return NULL; // failed to allocate memory
+        return NULL;
     else {
         node->key  = key;
         node->next = NULL;
@@ -68,8 +103,11 @@ void sll_append(int key, sll_node* head) {
 
 void sll_delete_node(int key, sll_node* head) {
     sll_node* prev = find_previous_node(key, head);
-    if (prev == NULL) // list empty or node not found
+
+    // list empty or node not found
+    if (prev == NULL)
         return;
+
     sll_node* tmp = prev->next;
     link_nodes(prev, tmp->next);
     free(tmp);
@@ -86,22 +124,22 @@ void sll_delete_first(sll_node* head) {
     free(first);
 }
 
-// insert after node whose key == k
 void sll_insert_after(int k, int key, sll_node* head) {
     sll_node* prev = find_previous_node(k, head);
-    if (prev == NULL) // list empty or node not found
+    // list empty or node not found
+    if (prev == NULL)
         return;
     sll_node* current = prev->next;
     insert_after_node(current, key);
 }
 
-// find node given its key
 sll_node* sll_find(int key, sll_node* head) {
     sll_node* prev = find_previous_node(key, head);
 
     // list is empty or node with given key not found
     if (prev == NULL)
         return NULL;
+
     return prev->next;
 }
 

@@ -11,7 +11,7 @@
  * @param head Pointer to the head node of the list.
  * @return true if the list is empty, false otherwise.
  */
-static int is_empty(sll_node* head);
+static bool is_empty(sll_node* head);
 
 /**
  * @brief Links two nodes together.
@@ -48,7 +48,7 @@ static sll_node* find_previous_node(int key, sll_node* head);
  */
 static void insert_after_node(sll_node* current, int key);
 
-static int is_empty(sll_node* head) {
+static bool is_empty(sll_node* head) {
     return (head->next == NULL ? true : false);
 }
 

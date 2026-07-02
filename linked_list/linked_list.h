@@ -5,17 +5,23 @@
 
 typedef struct sll_node sll_node;
 
+// Accessor methods:
+size_t sll_get_priority(sll_node* n);
+void* sll_get_data(sll_node* n);
+sll_node* sll_get_next(sll_node* n);
+
 /**
  * @brief Creates a new singly linked list node.
  *
  * Allocates memory for a new node and initializes its key and next pointer.
  *
  * @param key node priority.
+ * @param data the data to store.
  *
  * @return Pointer to the newly created node.
  * @return NULL if memory allocation fails.
  */
-sll_node* sll_create_node(size_t key);
+sll_node* sll_create_node(size_t key, void* data);
 
 /**
  * @brief Appends a node to the end of a singly linked list.
@@ -23,9 +29,10 @@ sll_node* sll_create_node(size_t key);
  * Creates a new node and attaches it after the current last node.
  *
  * @param key Node priority.
+ * @param data the data to store.
  * @param head Pointer to the head node of the list.
  */
-void sll_append(size_t key, sll_node* head);
+void sll_append(size_t key, void* data, sll_node* head);
 
 /**
  * @brief Inserts a new node at the beginning of the list.
@@ -33,9 +40,10 @@ void sll_append(size_t key, sll_node* head);
  * Inserts a node immediately after the head node.
  *
  * @param key node_priority
+ * @param data the data to store.
  * @param head Pointer to the head node of the list.
  */
-void sll_insert_first(size_t key, sll_node* head);
+void sll_insert_first(size_t key, void* data, sll_node* head);
 
 /**
  * @brief Inserts a new node after a node with a specific key.
@@ -45,11 +53,12 @@ void sll_insert_first(size_t key, sll_node* head);
  *
  * @param k Key of the existing node.
  * @param key Value to store in the new node.
+ * @param data the data to store.
  * @param head Pointer to the head node of the list.
  *
  * @note Does nothing if the target node is not found.
  */
-void sll_insert_after(size_t k, size_t key, sll_node* head);
+void sll_insert_after(size_t k, size_t key, void* data, sll_node* head);
 
 /**
  * @brief Deletes a node with a specific key from the list.
@@ -88,19 +97,5 @@ void sll_delete_first(sll_node* head);
  * @return NULL if the key is not found.
  */
 sll_node* sll_find(size_t key, sll_node* head);
-
-/**
- * @brief Prints the contents of the linked list.
- *
- * Outputs each node's key in order, followed by NULL.
- *
- * Example output:
- * @code
- * 1->2->3->NULL
- * @endcode
- *
- * @param head Pointer to the head node of the list.
- */
-void sll_print(sll_node* head);
 
 #endif

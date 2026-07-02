@@ -3,12 +3,11 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
-// TODO maybe remove key, it was originally used for the data
-// TODO add get data function since the struct is now obscured ( -> not the
-// correct word)
 typedef struct sll_node {
     size_t           key;  /* the priority of the node in the list */
+    void*            data; /* the data the node stores */
     struct sll_node* next; /* the next node in the list */
 } sll_node;
 
@@ -52,10 +51,11 @@ static sll_node* find_previous_node(size_t key, sll_node* head);
  * Creates a new node containing the given key and inserts it directly
  * after the provided node.
  *
- * @param current Node after which the new node will be inserted.
+ * @param current node after which the new node will be inserted.
+ * @param the data the node stores
  * @param key Value to store in the new node.
  */
-static void insert_after_node(sll_node* current, size_t key);
+static void insert_after_node(sll_node* current, size_t key, void* data);
 
 static bool is_empty(sll_node* head) {
     return (head->next == NULL ? true : false);
@@ -83,13 +83,19 @@ static sll_node* find_previous_node(size_t key, sll_node* head) {
     return prev;
 }
 
-static void insert_after_node(sll_node* current, size_t key) {
-    sll_node* new_node = sll_create_node(key);
+static void insert_after_node(sll_node* current, size_t key, void* data) {
+    sll_node* new_node = sll_create_node(key, data);
     link_nodes(new_node, current->next);
     link_nodes(current, new_node);
 }
 
-sll_node* sll_create_node(size_t key) {
+// Accessor methods:
+size_t sll_get_priority(sll_node* n) { return n->key; }
+void* sll_get_data(sll_node* n) { return n->data; }
+sll_node* sll_get_next(sll_node* n) { return n->next; }
+
+// Node methods
+sll_node* sll_create_node(size_t key, void* data) {
     sll_node* node = (sll_node*)malloc(sizeof(sll_node));
 
     // failed to allocate memory
@@ -97,32 +103,34 @@ sll_node* sll_create_node(size_t key) {
         return NULL;
 
     node->key  = key;
+    node->data = data;
     node->next = NULL;
+
     return node;
 }
 
-void sll_append(size_t key, sll_node* head) {
-    sll_node* newsll_node = sll_create_node(key);
-    sll_node* current     = head;
+void sll_append(size_t key, void* data, sll_node* head) {
+    sll_node* new_node = sll_create_node(key, data);
+    sll_node* current  = head;
 
     while (current->next != NULL) {
         current = current->next;
     }
 
-    link_nodes(current, newsll_node);
+    link_nodes(current, new_node);
 }
 
-void sll_insert_first(size_t key, sll_node* head) {
-    insert_after_node(head, key);
+void sll_insert_first(size_t key, void* data, sll_node* head) {
+    insert_after_node(head, key, data);
 }
 
-void sll_insert_after(size_t k, size_t key, sll_node* head) {
+void sll_insert_after(size_t k, size_t key, void* data, sll_node* head) {
     sll_node* prev = find_previous_node(k, head);
     // list empty or node not found
     if (prev == NULL)
         return;
     sll_node* current = prev->next;
-    insert_after_node(current, key);
+    insert_after_node(current, key, data);
 }
 
 void sll_delete_node(size_t key, sll_node* head) {
@@ -155,13 +163,4 @@ sll_node* sll_find(size_t key, sll_node* head) {
         return NULL;
 
     return prev->next;
-}
-
-void sll_print(sll_node* head) {
-    sll_node* current = head;
-    while (current->next != NULL) {
-        printf("%d->", current->key);
-        current = current->next;
-    }
-    printf("NULL\n");
 }

@@ -1,12 +1,12 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <stdbool.h>
 #include <stddef.h>
 
 typedef struct sll_node sll_node;
 
 // Accessor methods:
-size_t sll_get_priority(sll_node* n);
 void* sll_get_data(sll_node* n);
 sll_node* sll_get_next(sll_node* n);
 
@@ -15,13 +15,12 @@ sll_node* sll_get_next(sll_node* n);
  *
  * Allocates memory for a new node and initializes its key and next pointer.
  *
- * @param key node priority.
  * @param data the data to store.
  *
  * @return Pointer to the newly created node.
  * @return NULL if memory allocation fails.
  */
-sll_node* sll_create_node(size_t key, void* data);
+sll_node* sll_create_node(void* data);
 
 /**
  * @brief Appends a node to the end of a singly linked list.
@@ -32,7 +31,7 @@ sll_node* sll_create_node(size_t key, void* data);
  * @param data the data to store.
  * @param head Pointer to the head node of the list.
  */
-void sll_append(size_t key, void* data, sll_node* head);
+void sll_append(void* data, sll_node* head);
 
 /**
  * @brief Inserts a new node at the beginning of the list.
@@ -43,35 +42,17 @@ void sll_append(size_t key, void* data, sll_node* head);
  * @param data the data to store.
  * @param head Pointer to the head node of the list.
  */
-void sll_insert_first(size_t key, void* data, sll_node* head);
+void sll_insert_first(void* data, sll_node* head);
 
-/**
- * @brief Inserts a new node after a node with a specific key.
- *
- * Searches for the first node containing key k and inserts a new node
- * immediately after it.
- *
- * @param k Key of the existing node.
- * @param key Value to store in the new node.
- * @param data the data to store.
- * @param head Pointer to the head node of the list.
- *
- * @note Does nothing if the target node is not found.
- */
-void sll_insert_after(size_t k, size_t key, void* data, sll_node* head);
+void sll_insert_after(void* data, sll_node* head,
+                      bool (*comparison_func)(sll_node* node, size_t argc,
+                                              void* args[]),
+                      size_t argc, void* args[]);
 
-/**
- * @brief Deletes a node with a specific key from the list.
- *
- * Searches for the first occurrence of the given key and removes that node
- * from the linked list.
- *
- * @param key Key of the node to delete.
- * @param head Pointer to the head node of the list.
- *
- * @note Does nothing if the list is empty or the key is not found.
- */
-void sll_delete_node(size_t key, sll_node* head);
+void sll_delete_node(sll_node* head,
+                     bool (*comparison_func)(sll_node* node, size_t argc,
+                                             void* args[]),
+                     size_t argc, void* args[]);
 
 /**
  * @brief Deletes the first node in the list.
@@ -84,18 +65,9 @@ void sll_delete_node(size_t key, sll_node* head);
  */
 void sll_delete_first(sll_node* head);
 
-/**
- * @brief Finds a node with a given key.
- *
- * Searches through the linked list and returns the first node whose key
- * matches the provided value.
- *
- * @param key Key value to search for.
- * @param head Pointer to the head node of the list.
- *
- * @return Pointer to the matching node.
- * @return NULL if the key is not found.
- */
-sll_node* sll_find(size_t key, sll_node* head);
+sll_node* sll_find(sll_node* head,
+                   bool (*comparison_func)(sll_node* node, size_t argc,
+                                           void* args[]),
+                   size_t argc, void* args[]);
 
 #endif

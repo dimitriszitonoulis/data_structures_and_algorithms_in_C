@@ -36,8 +36,9 @@ bool comparison_func(sll_node* node, size_t argc, void* args[]) {
 }
 
 int main() {
-    char*     data = "hello";
-    sll_node* head = sll_create_node(data);
+    char* data = "hello";
+    // sll_node* head = sll_create_node(data);
+    sll_list* list = sll_initialize();
 
     int i = 1;
 
@@ -45,42 +46,44 @@ int main() {
         char* data = "node";
         // char* new_data = NULL;
         // char  new_data[100];
-        char* new_data = (char*)malloc(10);
+        char* new_data = malloc(10);
         sprintf(new_data, "%s %d", data, i);
-        sll_append(new_data, head);
+        // sll_append(new_data, head);
+        // i++;
+        sll_append(list, new_data);
         i++;
     }
 
-    sll_print(head);
+    sll_print(sll_get_head(list));
 
     // delete 8
     void* args[10];
     args[0] = "node 8";
-    sll_delete_node(head, comparison_func, 1, args);
-    sll_print(head);
+    sll_delete_node(list, comparison_func, 1, args);
+    sll_print(sll_get_head(list));
 
     // reinsert 8
     char* reinsert8 = (char*)malloc(10);
     reinsert8       = "node 8";
     args[0]         = "node 7";
-    sll_insert_after(reinsert8, head, comparison_func, 1, args);
-    sll_print(head);
+    sll_insert_after(list, reinsert8, comparison_func, 1, args);
+    sll_print(sll_get_head(list));
 
     // delete 1
-    sll_delete_first(head);
-    sll_print(head);
+    sll_delete_first(list);
+    sll_print(sll_get_head(list));
 
     // re-insert 1
     char* reinsert1 = (char*)malloc(10);
     reinsert1       = "node 1";
-    sll_insert_first(reinsert1, head);
-    sll_print(head);
+    sll_insert_first(list, reinsert1);
+    sll_print(sll_get_head(list));
 
     // append 11
     char* append_data = (char*)malloc(10);
     append_data       = "node 11";
-    sll_append(append_data, head);
-    sll_print(head);
+    sll_append(list, append_data);
+    sll_print(sll_get_head(list));
 
     return 0;
 }

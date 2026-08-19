@@ -5,69 +5,50 @@
 #include <stddef.h>
 
 typedef struct sll_node sll_node;
+typedef struct sll_list sll_list;
+typedef enum {
+    SLL_SUCCESS = 0,
+    SLL_ALLOCATION_ERROR,
+    SLL_NODE_NOT_FOUND,
+    SLL_LIST_EMPTY
+} sll_status;
+
+sll_list* sll_initialize(void);
 
 // Accessor methods:
+sll_node* sll_get_head(sll_list* list);
+sll_node* sll_get_tail(sll_list* list);
+size_t sll_get_size(sll_list* list);
+// void sll_set_data(sll_node* n, void* data);
 void* sll_get_data(sll_node* n);
 sll_node* sll_get_next(sll_node* n);
 
-/**
- * @brief Creates a new singly linked list node.
- *
- * Allocates memory for a new node and initializes its key and next pointer.
- *
- * @param data the data to store.
- *
- * @return Pointer to the newly created node.
- * @return NULL if memory allocation fails.
- */
-sll_node* sll_create_node(void* data);
+sll_status sll_append(sll_list* list, void* data);
 
-/**
- * @brief Appends a node to the end of a singly linked list.
- *
- * Creates a new node and attaches it after the current last node.
- *
- * @param key Node priority.
- * @param data the data to store.
- * @param head Pointer to the head node of the list.
- */
-void sll_append(void* data, sll_node* head);
+sll_status sll_insert_first(sll_list* list, void* data);
 
-/**
- * @brief Inserts a new node at the beginning of the list.
- *
- * Inserts a node immediately after the head node.
- *
- * @param key node_priority
- * @param data the data to store.
- * @param head Pointer to the head node of the list.
- */
-void sll_insert_first(void* data, sll_node* head);
+sll_status sll_insert_after(
+    sll_list* list,
+    void*     data,
+    bool (*comparison_func)(sll_node* node, size_t argc, void* args[]),
+    size_t argc,
+    void*  args[]
+);
 
-void sll_insert_after(void* data, sll_node* head,
-                      bool (*comparison_func)(sll_node* node, size_t argc,
-                                              void* args[]),
-                      size_t argc, void* args[]);
+sll_status sll_delete_node(
+    sll_list* list,
+    bool (*comparison_func)(sll_node* node, size_t argc, void* args[]),
+    size_t argc,
+    void*  args[]
+);
 
-void sll_delete_node(sll_node* head,
-                     bool (*comparison_func)(sll_node* node, size_t argc,
-                                             void* args[]),
-                     size_t argc, void* args[]);
+sll_status sll_delete_first(sll_list* list);
 
-/**
- * @brief Deletes the first node in the list.
- *
- * Removes the first element after the head node.
- *
- * @param head Pointer to the head node of the list.
- *
- * @note Does nothing if the list is empty.
- */
-void sll_delete_first(sll_node* head);
-
-sll_node* sll_find(sll_node* head,
-                   bool (*comparison_func)(sll_node* node, size_t argc,
-                                           void* args[]),
-                   size_t argc, void* args[]);
+sll_node* sll_find(
+    sll_list* list,
+    bool (*comparison_func)(sll_node* node, size_t argc, void* args[]),
+    size_t argc,
+    void*  args[]
+);
 
 #endif
